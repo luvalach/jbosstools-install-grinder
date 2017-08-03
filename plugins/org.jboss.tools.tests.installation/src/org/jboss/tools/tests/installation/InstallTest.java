@@ -20,6 +20,7 @@ import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
 import org.eclipse.swtbot.swt.finder.waits.ICondition;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
+import org.jboss.tools.tests.installation.wait.condition.ShellWithTitleIsActive;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -142,61 +143,20 @@ public class InstallTest extends SWTBotEclipseTestCase {
 
 	}
 
-
 	public static void continueInstall(final SWTWorkbenchBot bot) throws InstallFailureException {
-		continueInstall(bot, "Installing Software");
-	}
-
-
-	public static void continueInstall(final SWTWorkbenchBot bot, final String shellTitle) throws InstallFailureException {
 		try {
 			bot.radio(0).click();
 			bot.button("Finish").click();
 			// wait for Security pop-up, or install finished.
+			bot.waitUntil(new ShellWithTitleIsActive("Security Warning|Software Updates"), installationTimeout);
 			
-			bot.waitUntil(new ICondition() {
-
-				@Override
-				public boolean test() throws Exception {
-					return bot.activeShell().getText().matches("Security Warning|Software Updates");
-				}
-
-				@Override
-				public void init(SWTBot bot) {
-				}
-
-				@Override
-				public String getFailureMessage() {
-					return null;
-				}
-			}, installationTimeout);
 			if (bot.activeShell().getText().equals("Security Warning")) {
 				bot.button("OK").click();
 				System.err.println("OK clicked");
-				bot.waitUntil(new ICondition() {
-					@Override
-					public boolean test() throws Exception {
-						try {
-							boolean stillOpen = bot.shell(shellTitle).isOpen();
-							System.err.println("still open? " + stillOpen);
-							return !stillOpen;
-						} catch (WidgetNotFoundException ex) {
-							System.err.println("no shell");
-							// Shell already closed
-							return true;
-						}
-					}
-
-					@Override
-					public void init(SWTBot bot) {
-					}
-
-					@Override
-					public String getFailureMessage() {
-						return null;
-					}
-				}, installationTimeout); // 15 more minutes
+				bot.waitWhile(new ShellWithTitleIsActive("Security Warning"), 60000L);
 			}
+			
+			bot.waitUntil(new ShellWithTitleIsActive("Software Updates"), 5 * 60000L);
 			SWTBot restartShellBot = bot.shell("Software Updates").bot();
 			// Don't restart in test, test executor will do it.
 			try {
@@ -248,5 +208,5 @@ public class InstallTest extends SWTBotEclipseTestCase {
 		}
 		return checked;
 	}
-
 }
+

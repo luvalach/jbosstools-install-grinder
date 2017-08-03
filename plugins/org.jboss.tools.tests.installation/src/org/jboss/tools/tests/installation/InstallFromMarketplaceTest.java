@@ -93,7 +93,7 @@ public class InstallFromMarketplaceTest extends SWTBotEclipseTestCase {
 		// wait for resolving dependencies, this can be detected by checking whether button 'Cancel' is enabled
 		bot.waitUntil(Conditions.widgetIsEnabled(bot.button("Cancel")), installationTimeout);
 
-		InstallTest.continueInstall(bot, "Installing Software");
+		InstallTest.continueInstall(bot);
 	}
 
 	private SWTBotDiscoveryItem discoveryItem(String label) {

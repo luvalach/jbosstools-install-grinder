@@ -150,7 +150,7 @@ void runSWTBotInstallRoutine(File eclipseHome, String productName, Collection<St
 
 	String debugPort = System.getProperty("debugPort");
 	if (debugPort != null) {
-		vmArgs += "-agentlib:jdwp=transport=dt_socket,address=localhost:" + debugPort + ",server=y,suspend=y";
+		vmArgs += "-agentlib:jdwp=transport=dt_socket,address=" + debugPort + ",server=y,suspend=y";
 	}
 	println "vmArgs=" + vmArgs.join(" ")
 

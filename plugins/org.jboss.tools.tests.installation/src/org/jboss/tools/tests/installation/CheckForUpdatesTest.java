@@ -65,6 +65,6 @@ public class CheckForUpdatesTest extends SWTBotEclipseTestCase {
 		}, installationTimeout);
 		bot.button("Next >").click();
 		bot.button("Next >").click();
-		InstallTest.continueInstall(bot, "Updating Software");
+		InstallTest.continueInstall(bot);
 	}
 }

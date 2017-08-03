@@ -132,7 +132,7 @@ public class InstallZipTest extends SWTBotEclipseTestCase {
 		}, installationTimeout);
 		this.bot.button("Next >").click();
 		try {
-			InstallTest.continueInstall(bot, "Installing Software");
+			InstallTest.continueInstall(bot);
 		} catch (InstallFailureException ex) {
 			StringBuilder message = new StringBuilder();
 			message.append("Could not install from: " + zip);
